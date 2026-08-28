@@ -9,6 +9,8 @@ import { PersonaSections } from "@/components/persona-sections";
 import { MemoryList } from "@/components/memory-list";
 import { EmptyState } from "@/components/empty-state";
 import Link from "next/link";
+import { Suspense } from "react";
+import { AddMemoryModal } from "@/components/add-memory-modal";
 
 export default async function PersonaProfilePage({
   params,
@@ -88,6 +90,10 @@ export default async function PersonaProfilePage({
           </Link>
         </div>
       )}
+
+      <Suspense fallback={null}>
+        <AddMemoryModal personId={id} personName={person.name} />
+      </Suspense>
     </div>
   );
 }
