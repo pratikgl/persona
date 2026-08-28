@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Persona
 
-## Getting Started
+Remember the little things about people you care about.
 
-First, run the development server:
+Persona is a mobile-first PWA that helps you build an evolving portrait of the people in your life. Tell it something in natural language — it understands, structures, and remembers.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Setup
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Clone the repo and install dependencies:
+   ```bash
+   pnpm install
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+2. Copy `.env.example` to `.env` and fill in:
+   ```
+   DATABASE_URL=         # Neon PostgreSQL connection string
+   AUTH_SECRET=          # Random 32+ char string: openssl rand -base64 32
+   OPENROUTER_API_KEY=   # From openrouter.ai
+   OPENROUTER_MODEL=     # e.g. openai/gpt-4o-mini
+   NEXTAUTH_URL=         # http://localhost:3000 for dev
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Push the database schema:
+   ```bash
+   pnpm db:push
+   ```
 
-## Learn More
+4. (Optional) Load demo data:
+   ```bash
+   pnpm db:seed
+   ```
+   Login: `demo@persona.app` / `demo1234`
 
-To learn more about Next.js, take a look at the following resources:
+5. Start the dev server:
+   ```bash
+   pnpm dev
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Next.js 16 · TypeScript · Tailwind CSS v4 · Drizzle ORM · Neon PostgreSQL · Auth.js v5 · OpenRouter · Framer Motion
 
-## Deploy on Vercel
+## Architecture
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Server Components** for all data reads
+- **Server Actions** for mutations (add person, save memory)
+- **Route Handler** (`/api/ai/process`) for AI pipeline
+- **AI abstraction** (`lib/ai/`) — swap providers by editing one file
+- Raw user input is always preserved — LLM summaries are derived, never the source of truth
