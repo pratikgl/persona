@@ -39,6 +39,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col bg-background text-foreground antialiased">
         {children}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js');
+        });
+      }
+    `,
+          }}
+        />
       </body>
     </html>
   );

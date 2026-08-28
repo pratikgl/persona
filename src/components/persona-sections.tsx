@@ -1,3 +1,7 @@
+"use client";
+
+import { AnimateIn, StaggerContainer, StaggerItem } from "@/components/animate-in";
+
 interface PersonaSectionsProps {
   name: string;
   structuredData: {
@@ -34,24 +38,25 @@ export function PersonaSections({ name, structuredData }: PersonaSectionsProps) 
   if (nonEmptySections.length === 0) return null;
 
   return (
-    <div className="mt-8 space-y-6">
-      {nonEmptySections.map((section) => (
-        <section key={section.key}>
-          <h3 className="mb-2 text-sm font-medium uppercase tracking-wider text-text-secondary">
-            {section.label(name)}
-          </h3>
-          <div className="flex flex-wrap gap-2">
-            {structuredData[section.key]!.map((item, i) => (
-              <span
-                key={i}
-                className="rounded-xl bg-accent-light px-3 py-1.5 text-sm text-accent"
-              >
-                {item}
-              </span>
-            ))}
-          </div>
-        </section>
-      ))}
-    </div>
+    <AnimateIn delay={0.2}>
+      <div className="mt-8 space-y-6">
+        {nonEmptySections.map((section) => (
+          <section key={section.key}>
+            <h3 className="mb-2 text-sm font-medium uppercase tracking-wider text-text-secondary">
+              {section.label(name)}
+            </h3>
+            <StaggerContainer className="flex flex-wrap gap-2">
+              {structuredData[section.key]!.map((item, i) => (
+                <StaggerItem key={i}>
+                  <span className="inline-block rounded-xl bg-accent-light px-3 py-1.5 text-sm text-accent">
+                    {item}
+                  </span>
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
+          </section>
+        ))}
+      </div>
+    </AnimateIn>
   );
 }

@@ -1,4 +1,7 @@
+"use client";
+
 import { getInitials } from "@/lib/utils";
+import { AnimateIn } from "@/components/animate-in";
 
 const relationshipLabels: Record<string, { label: string; emoji: string }> = {
   partner: { label: "Partner", emoji: "❤️" },
@@ -16,18 +19,20 @@ export function PersonaHeader({ name, relationship }: PersonaHeaderProps) {
   const rel = relationshipLabels[relationship] || relationshipLabels.other;
 
   return (
-    <div className="flex items-center gap-4">
-      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-accent-light text-lg font-medium text-accent">
-        {getInitials(name)}
+    <AnimateIn>
+      <div className="flex items-center gap-4">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-accent-light text-lg font-medium text-accent">
+          {getInitials(name)}
+        </div>
+        <div>
+          <h1 className="font-serif text-3xl">
+            {name} {rel.emoji}
+          </h1>
+          {rel.label && (
+            <p className="mt-0.5 text-sm text-text-secondary">{rel.label}</p>
+          )}
+        </div>
       </div>
-      <div>
-        <h1 className="font-serif text-3xl">
-          {name} {rel.emoji}
-        </h1>
-        {rel.label && (
-          <p className="mt-0.5 text-sm text-text-secondary">{rel.label}</p>
-        )}
-      </div>
-    </div>
+    </AnimateIn>
   );
 }
